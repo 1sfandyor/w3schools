@@ -7,29 +7,84 @@ export default {
   theme: {
     extend: {
       screens: {
-        sm: '600px',
+        sm: '375px',
+        lt: '425px',
         md: '768px',
-        lg: '984px',
-        xl: '1900px',
-        '2xl': '1496px',
+        lp: '1024px',
+        lg: '1300px',
+        xl: '1440px',
+      '2xl': '1990px',
       },
 
       fontFamily: {
-        primary: 'Arial, sans-serif'
-      }
+        primary: ['Source Sans Pro', 'Arial', 'sans-serif']
+      },
+
+      colors: {
+        // GRAY
+        gray: '#38444d',
+        grayer: "#282A35",
+        darkgray: '#1d2a35',
+        lightgray: '#f3ecea',
+        grayText: '#ddd',
+
+        // BLUE
+        blue: '#80b6ff',
+        darkBlue: '#0d1721',
+        mBlue: '#15202b',
+
+        // GREEN
+        green: '#04AA6D',
+        darkGreen: "#88c999",
+
+        laym: "#D9EEE1",
+        red: '#ff9999',
+        yellow: "#FFF4A3",
+        pink: '#ffc0c7',
+        cyan: '#96D4D4',
+        purple: "#c5a5c5"
+      },
     },
+    
+
 
     container: {
       center: true,
       padding: {
         DEFAULT: '1rem',
-        sm: '2rem',
-        lg: '4rem',
-        xl: '5rem',
-        '2xl': '6rem',
       }
     }
 
   },
-  plugins: [],
+  plugins: [
+    function ({ addComponents }) {
+      addComponents({
+        '.container': {
+          width: '100%',
+          maxWidth: '100%',
+          '@screen sm': {
+            maxWidth: '375px',
+          },
+          '@screen lt': {
+            maxWidth: '425px',
+          },
+          '@screen md': {
+            maxWidth: '768px',
+          },
+          '@screen lp': {
+            maxWidth: '1024px',
+          },
+          '@screen lg': {
+            maxWidth: '1300px',
+          },
+          '@screen xl': {
+            maxWidth: '1440px',
+          },
+          '@screen 2xl': {
+            maxWidth: '1990px', 
+          },
+        }
+      })
+    }
+  ],
 }

@@ -42,7 +42,8 @@ export default {
         yellow: "#FFF4A3",
         pink: '#ffc0c7',
         cyan: '#96D4D4',
-        purple: "#c5a5c5"
+        purple: "#c5a5c5",
+        brown: "#a52a2a"
       },
     },
     

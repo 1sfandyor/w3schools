@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_menu_links",
+  "info": {
+    "displayName": "link",
+    "icon": "link",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "Tutorial": {
+      "displayName": "Tutorial",
+      "type": "component",
+      "repeatable": false,
+      "component": "menu.tutorial"
+    },
+    "Reference": {
+      "displayName": "Reference",
+      "type": "component",
+      "repeatable": false,
+      "component": "menu.reference"
+    }
+  }
+}

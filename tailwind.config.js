@@ -7,8 +7,9 @@ export default {
   theme: {
     extend: {
       screens: {
-        sm: '375px',
-        lt: '425px',
+        sm: '476px',
+        lt: '603px',
+        smd: '617px',
         md: '768px',
         lp: '1024px',
         lg: '1300px',
@@ -46,7 +47,6 @@ export default {
         brown: "#a52a2a"
       },
     },
-    
 
 
     container: {
@@ -64,10 +64,10 @@ export default {
           width: '100%',
           maxWidth: '100%',
           '@screen sm': {
-            maxWidth: '375px',
+            maxWidth: '476px',
           },
           '@screen lt': {
-            maxWidth: '425px',
+            maxWidth: '603px',
           },
           '@screen md': {
             maxWidth: '768px',

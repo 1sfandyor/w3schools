@@ -49,10 +49,12 @@ export interface MenuMenuLink extends Schema.Component {
   info: {
     displayName: 'MenuLink';
     icon: 'link';
+    description: '';
   };
   attributes: {
     title: Attribute.String;
     url: Attribute.String;
+    icon: Attribute.Media<'images'>;
   };
 }
 

@@ -1,16 +1,21 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { GrSearch } from "react-icons/gr";
 import { VscColorMode } from "react-icons/vsc";
 import { CiUser } from "react-icons/ci";
 import logo from '../../assets/logo.svg';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { getMenu } from "../../services/navbar";
 
 const Navbar = () => {
     const [leftItems, setLeftItems] = useState([]);
     const [rightItems, setRightItems] = useState([]);
+    const [showMenu, setShowMenu] = useState(false);
+
+    const handleMenu = () => {
+        setShowMenu(!showMenu)
+    }
 
     useEffect(() => {
         const fetchMenu = async () => {
@@ -72,12 +77,13 @@ const Navbar = () => {
     };
 
     return (
+        <>
         <nav className="flex items-center justify-between bg-darkgray w-full">
             <Link to="/" className="flex py-2 px-4 shrink-0">
                 <img className="flex max-w-[38px] w-[38.34px] h-9 shrink-0" src={logo} alt="logo" width={'38.34px'} height={36}/>
             </Link>
 
-            <div className="flex items-center w-full justify-between">
+            <div className={`flex items-center w-full justify-between`}>
 
                 <div className="flex items-center">
                     {/* DARSLIKLAR ... */}
@@ -90,10 +96,13 @@ const Navbar = () => {
                     {/* SEARCH / MODE */}
                     <div className="flex items-center">
                         {/* MENU */}
-                        <Link to="/" className="flex smd:hidden items-center p-4 text-base text-grayText font-primary leading-normal">
+                        <button 
+                            className="flex smd:hidden items-center p-4 text-base text-grayText font-primary leading-normal"
+                            onClick={handleMenu}
+                            >
                             <span className="mr-1">Menu</span>
                             <FontAwesomeIcon className="self-center" icon={faCaretDown} color="white" />
-                        </Link>
+                        </button>
 
                         {/* INPUT SEARCH */}
                         <div className="p-[9px] relative">
@@ -130,7 +139,26 @@ const Navbar = () => {
                 <span>Log in</span>
                 <CiUser className="hidden sm:flex text-xl font-bold"/>
             </Link>
+
+
+            
         </nav>
+
+        {/* Modal */}
+        {/* {showMenu && (
+            <div className="fixed inset-0 top-14 bg-grayer flex flex-col items-center justify-start z-50 p-4 overflow-auto">
+                <button className="self-end text-white p-2"
+                    onClick={handleMenu}
+                >
+                    <FontAwesomeIcon icon={faTimes} size="2x" />
+                </button>
+                <div className="flex flex-col items-start w-full mt-4 z-40">
+                    {leftItems.map(renderMenuItem)}
+                    {rightItems.map(renderMenuItem)}
+                </div>
+            </div>
+        )} */}
+        </>
     );
 }
 

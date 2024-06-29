@@ -151,5 +151,9 @@
         @apply text-lg font-bold font-primary;
     }
 
+    nav a.active {
+        @apply !bg-green;
+    }
+
 }
 

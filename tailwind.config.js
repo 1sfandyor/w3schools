@@ -43,6 +43,7 @@ export default {
         darkgray: '#1d2a35',
         lightgray: '#f3ecea',
         grayText: '#ddd',
+        line: '#43444a',
 
         // BLUE
         blue: '#80b6ff',

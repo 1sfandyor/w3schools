@@ -8,7 +8,8 @@ export default {
     extend: {
       content: {
         'karzinka': 'url("./assets/karzinka.svg")',
-        'arrowUpIcon': 'url("../src/arrow-up-icon.svg")',
+        'code': 'url("./assets/code.svg")',
+        'magic': 'url("./assets/magic.svg")'
       },
       screens: {
         xs: '500px',

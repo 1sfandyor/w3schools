@@ -1,23 +1,32 @@
 import { Link } from "react-router-dom";
-
 import { GrSearch } from "react-icons/gr";
 import { VscColorMode } from "react-icons/vsc";
 import { CiUser } from "react-icons/ci";
-
 import logo from '../../assets/logo.svg';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { getMenu } from "../../services/navbar";
 
-
 const Navbar = () => {
-    const [menuItems, setMenuItems] = useState([]);
+    const [leftItems, setLeftItems] = useState([]);
+    const [rightItems, setRightItems] = useState([]);
 
     useEffect(() => {
         const fetchMenu = async () => {
             const data = await getMenu();
-            setMenuItems(data.data.attributes.MainMenuItems);
+            const left = [];
+            const right = [];
+            data.data.attributes.MainMenuItems.forEach(item => {
+                if (item.__component === "menu.dropdown") {
+                    left.push(item);
+                } else if (item.__component === "menu.menu-link") {
+                    right.push(item);
+                }
+            });
+
+            setLeftItems(left);
+            setRightItems(right);
         };
 
         fetchMenu();
@@ -29,10 +38,10 @@ const Navbar = () => {
             case "menu.dropdown":
                 return (
                     <Link to="/" 
-                        className={`hidden smd:flex items-center p-4 text-base text-grayText font-primary leading-normal 
+                        className={`hidden smd:flex items-center py-4 px-3 text-base text-grayText font-primary 
                             ${
                             item.id === 3
-                            ? 'smd:hidden'
+                            ? 'smd:hidden xslp:flex'
                             : ''
                             }
                         `} 
@@ -49,9 +58,9 @@ const Navbar = () => {
                         item.id == 3 
                         ? `relative xs:flex lt:hidden xlt:flex smd:hidden lmd:flex mmd:hidden xmd:flex xslp:hidden llp:flex before:content-karzinka before:w-4 before:h-4 before:mr-2`
                         : item.id == 2
-                        ? 'mlp:flex'
-                        : 'xlp:flex'
-                        } items-center p-4 text-base text-grayText font-primary leading-normal`}
+                        ? 'mlp:flex before:content-code before:w-4 before:h-4 before:mr-2'
+                        : 'xlp:flex before:content-magic before:w-4 before:h-4 before:mr-2 before:relative before:bottom-2.5'
+                        } items-center py-4 px-3 text-base text-grayText font-primary leading-normal`}
                         key={item.id}>
                         {iconUrl && <img src={iconUrl} alt={`${item.title} icon`} className="mr-2 w-5 h-5" />}
                         {item.title}
@@ -62,57 +71,64 @@ const Navbar = () => {
         }
     };
 
-
     return (
-        <nav className="flex items-center justify-start bg-darkgray">
+        <nav className="flex items-center justify-between bg-darkgray w-full">
             <Link to="/" className="flex py-2 px-4 shrink-0">
                 <img className="flex max-w-[38px] w-[38.34px] h-9 shrink-0" src={logo} alt="logo" width={'38.34px'} height={36}/>
             </Link>
 
+            <div className="flex items-center w-full justify-between">
 
-            {/* MENU / INPUT / MODE */}
-            <div className="flex items-center w-full justify-between smd:justify-start">
-                <div className="flex items-center smd:order-1">
+                <div className="flex items-center">
+                    {/* DARSLIKLAR ... */}
+                    <div className="flex items-center">
+                        <div className="flex items-center">
+                            {leftItems.map(renderMenuItem)}
+                        </div>
+                    </div>
 
-                    {/* MENU */}
-                    <Link to="/" className="flex smd:hidden items-center p-4 text-base text-grayText font-primary leading-normal">
-                        <span className="mr-1">Menu</span>
-                        <FontAwesomeIcon className="self-center" icon={faCaretDown} color="white" />
-                    </Link>
+                    {/* SEARCH / MODE */}
+                    <div className="flex items-center">
+                        {/* MENU */}
+                        <Link to="/" className="flex smd:hidden items-center p-4 text-base text-grayText font-primary leading-normal">
+                            <span className="mr-1">Menu</span>
+                            <FontAwesomeIcon className="self-center" icon={faCaretDown} color="white" />
+                        </Link>
 
-                    {/* INPUT SEARCH */}
-                    <div className="p-[9px] relative">
-                        <button className="text-base py-2.5 px-2.5 lt:hidden smd:flex">
-                            <GrSearch color="#ddd" fontSize={16} />
-                        </button>
-                        <div className="smd:hidden">
-                            <input 
-                                type="text" 
-                                className="w-44 hidden lt:flex py-1 pl-4 pr-10 border-none rounded-3xl text-lg text-darkgray focus:ring-[3px] focus:ring-green focus:outline-none" 
-                                placeholder="Qidiruv" required/>
-                            <button type="button" className="absolute hidden inset-y-0 end-0 lt:flex items-center right-5 !text-black">
-                                <GrSearch color="#ddd" fontSize={16} className="w-[18px] h-[18px] !text-black dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"/>
+                        {/* INPUT SEARCH */}
+                        <div className="p-[9px] relative">
+                            <button className="text-base py-2.5 px-2.5 lt:hidden smd:flex mmd:hidden">
+                                <GrSearch color="#ddd" fontSize={16} />
+                            </button>
+                            <div className="smd:hidden mmd:flex">
+                                <input 
+                                    type="text" 
+                                    className="w-44 hidden lt:flex py-1 pl-4 pr-10 border-none rounded-3xl text-lg text-darkgray focus:ring-[3px] focus:ring-green focus:outline-none" 
+                                    placeholder="Qidiruv" required/>
+                                <button type="button" className="absolute hidden inset-y-0 end-0 lt:flex items-center right-5 !text-black">
+                                    <GrSearch color="#ddd" fontSize={16} className="w-[18px] h-[18px] !text-black dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"/>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* CHANGE COLOR MODE */}
+                        <div className="p-[9px]">
+                            <button className="text-base py-2.5 px-2">
+                                <VscColorMode color="#ddd" fontSize={18} />
                             </button>
                         </div>
                     </div>
-                    
-
-                    {/* CHANGE COLOR MODE */}
-                    <div className="p-[9px]">
-                        <button className="text-base py-2.5 px-2">
-                            <VscColorMode color="#ddd" fontSize={18} />
-                        </button>
-                    </div>
                 </div>
 
+                {/* ACTIONS */}
                 <div className="flex items-center">
-                    {menuItems.map(renderMenuItem)}
+                    {rightItems.map(renderMenuItem)}
                 </div>
             </div>
 
             <Link to="" className={`flex items-center text-base text-grayText py-2 px-4 font-primary text-nowrap`} >
-                    <span>Log in</span>
-                    <CiUser className="hidden sm:flex ml-4 text-xl font-bold"/>
+                <span>Log in</span>
+                <CiUser className="hidden sm:flex text-xl font-bold"/>
             </Link>
         </nav>
     );

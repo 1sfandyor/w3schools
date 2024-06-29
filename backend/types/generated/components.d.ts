@@ -36,7 +36,6 @@ export interface MenuMenuBtn extends Schema.Component {
   info: {
     displayName: 'menuBtn';
     icon: 'cursor';
-    description: '';
   };
   attributes: {
     title: Attribute.String;

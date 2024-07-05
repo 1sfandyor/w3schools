@@ -44,7 +44,7 @@ export default {
         lightgray: '#f3ecea',
         grayText: '#ddd',
         line: '#43444a',
-
+        placeholder: '#464646',
         // BLUE
         blue: '#80b6ff',
         darkBlue: '#0d1721',
@@ -55,7 +55,11 @@ export default {
         darkGreen: "#88c999",
 
         laym: "#D9EEE1",
+        
+        // RED
         red: '#ff9999',
+        darkRed: '#d9212c',
+        
         yellow: "#FFF4A3",
         pink: '#ffc0c7',
         cyan: '#96D4D4',

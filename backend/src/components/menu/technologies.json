@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_menu_technologies",
+  "info": {
+    "displayName": "technologies",
+    "icon": "link"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    }
+  }
+}

@@ -4,7 +4,8 @@
   "info": {
     "singularName": "main-menu",
     "pluralName": "main-menus",
-    "displayName": "MainMenu"
+    "displayName": "MainMenu",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -17,6 +18,12 @@
         "menu.dropdown",
         "menu.menu-btn",
         "menu.menu-link"
+      ]
+    },
+    "TechnologiesBar": {
+      "type": "dynamiczone",
+      "components": [
+        "menu.technologies"
       ]
     }
   }

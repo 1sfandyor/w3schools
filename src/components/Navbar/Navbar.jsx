@@ -1,13 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faCaretUp, faCircleHalfStroke, faClose, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faCaretUp, faClose, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { GrSearch } from "react-icons/gr";
 import { VscColorMode } from "react-icons/vsc";
 import { CiUser } from "react-icons/ci";
 import logo from '../../assets/logo.svg';
-import { getMenu } from "../../services/navbar";
 import style from './navbar.module.css';
+import { Dropdown } from "../Dropdown/Dropdown";
+import { getMenu } from "../../hook/GET";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import { TechNav } from "../TechNav/TechNav";
 
 const htmlTag = document.documentElement;
 
@@ -17,13 +21,18 @@ const Navbar = () => {
     const [showMenu, setShowMenu] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
     const [dark, setDark] = useState(false);
-
+    const [dropDown, setDropDown] = useState(false);
+    const [dropTitle, setDropTitle] = useState();
+    const [loading, setLoading] = useState(true);
+    const left = [];
+    const right = [];
+    
 
     useEffect(() => {
         const fetchMenu = async () => {
-            const data = await getMenu();
-            const left = [];
-            const right = [];
+            setLoading(true);
+            const data = await getMenu('http://localhost:1337/api/main-menu?populate=MainMenuItem&populate[1]=MainMenuItems.sections&populate[2]=MainMenuItems.sections.links&populate[3]=MainMenuItems.sections.links.Tutorial&populate[4]=MainMenuItems.sections.links.Reference');
+
             data.data.attributes.MainMenuItems.forEach(item => {
                 if (item.__component === "menu.dropdown") {
                     left.push(item);
@@ -34,15 +43,20 @@ const Navbar = () => {
 
             setLeftItems(left);
             setRightItems(right);
+            setLoading(false); // Set loading to false once data is fetched
         };
 
         fetchMenu();
     }, []);
-    const handleStyle = useRef()
+
+    // USEREFS
+    const handleStyle = useRef();
+    const menuDropdownRef = useRef();
 
     // HANDLE HAMBURGER MENU
     const handleMenu = () => {
         setShowMenu(!showMenu);
+        setDropDown(!dropDown)
         handleStyle.current.classList.toggle('active');
         showMenu ? handleStyle.current.style.color = dark ? '#ddd' : 'black' : handleStyle.current.style.color = dark ? 'white' : 'white'
     };
@@ -60,7 +74,17 @@ const Navbar = () => {
         localStorage.setItem('mode', `${newMode ? 'dark' : 'light'}`);
     }
 
-
+    // HANDLE DROPDOWN
+    const handleDropDownMenu = (title) => {
+        
+        if (title != dropTitle) {
+            setDropDown(true);
+        }else if (title == dropTitle){
+            setDropDown(!dropDown);
+        }
+        setDropTitle(title);
+    }
+    
     useEffect(() => {
         if (localStorage.getItem('mode') === 'dark') {
             htmlTag.classList.add('dark');
@@ -81,7 +105,11 @@ const Navbar = () => {
                             ${
                                 item.id === 3 ? 'smd:hidden xslp:flex' : ''
                             }`}
-                        key={item.id}>
+                        key={item.id}
+                        onClick={() => handleDropDownMenu(item.title)}
+                        ref={menuDropdownRef}
+                        >
+                        
                         <span className="mr-1">{item.title}</span>
                         <FontAwesomeIcon className="self-center text-lg" icon={faCaretDown} color={dark ? 'text-gray' : 'text-black'} />
                     </Link>
@@ -89,7 +117,7 @@ const Navbar = () => {
             case "menu.menu-link":
                 return (
                     <Link to={item.url}
-                        className={`hidden text-nowrap ${dark ? 'hover:bg-white/10' : 'hover:bg-black/5'} rounded-full before:relative  ${
+                        className={`hidden text-nowrap xlp:mr-2 ${dark ? 'hover:bg-white/10' : 'hover:bg-black/5'} rounded-full before:relative  ${
                             item.id == 3 ? 'relative xs:flex lt:hidden xlt:flex smd:hidden lmd:flex mmd:hidden before:mr-3 xl:before:mr-5 xmd:flex xslp:hidden llp:flex before:content-karzinka before:w-4 before:h-4 ' :
                             item.id == 2 ? 'mlp:flex before:content-code before:w-4 before:h-4 xlp:before:mr-3 mlp:before:mr-2 ' :
                             'xlp:flex before:content-magic before:w-4 before:h-4 xlp:before:mr-3 lg:before:bottom-2.5 xlp:before:bottom-2 '
@@ -132,21 +160,26 @@ const Navbar = () => {
     };
 
 
-
     return (
-        <>
-            <nav className={`flex items-center justify-between  ${dark ? '' : 'bg-white text-black'} w-full`}>
+        <>            
+            <nav className={`flex items-center justify-between relative ${dark ? '' : 'bg-white text-black'} w-full`}>
                 <Link to="/" className={`${showSearch ? 'hidden' : 'flex'}  2xl:pt-[0.525rem] 2xl:pb-[0.625rem] px-4 2xl:pl-6 shrink-0`}>
-                    <img className="flex w-9 2xl:w-[52px] h-10 2xl:h-14 " src={logo} alt="logo" width={'38.34px'}/>
+                    {
+                        loading
+                        ? <Skeleton inline={true} width={36} height={40} count={1}/>
+                        : <img className="flex w-9 2xl:w-[52px] h-10 2xl:h-14 " src={logo} alt="logo" width={'38.34px'}/> }
                 </Link>
-{/*  */}
+
                 {/* MAIN WRAPPER WITHOUT LOGIN */}
                 <div className={`flex items-center w-full justify-between xmd:justify-start llp:justify-between ${dark ? '' : 'text-black'}`}>
                     <div className={`${showSearch ? 'w-full' : ''} flex items-center`}>
-
                         {/* Left items in main navbar */}
                         <div className={`${showSearch ? 'hidden' : 'flex'} items-center`}>
-                            {leftItems.map(renderNavbarItem)}
+                            {
+                                loading 
+                                ? <Skeleton inline={true} width={100} height={10} count={screen.width <= 954 ? 3 : 4} className={`hidden smd:inline-flex mr-2`}/>
+                                : leftItems.map(renderNavbarItem)
+                            }
                         </div>
 
                         {/* Search and toggle 369mode buttons */}
@@ -187,7 +220,7 @@ const Navbar = () => {
 
                             {/* Change color mode */}
                             <div className={`p-[9px] ${showSearch ? 'hidden' : 'flex'}`}>
-                                <button className={`text-base p-2 rounded-full ${dark ? 'hover:bg-white/10' : 'hover:bg-black/10'}`} px-2  onClick={handleMode}>
+                                <button className={`text-base p-2 rounded-full ${dark ? 'hover:bg-white/10' : 'hover:bg-black/10'} px-2`}  onClick={handleMode}>
                                     {dark 
                                     ? <VscColorMode color="#ddd" className="text-lg lx:text-3xl" /> 
                                     : <VscColorMode color="#000" className="text-lg lx:text-3xl" /> }
@@ -198,14 +231,26 @@ const Navbar = () => {
 
                     {/* Right items in main navbar */}
                     <div className={`${showSearch ? 'hidden' : 'flex'} items-center `}>
-                        {rightItems.map(renderNavbarItem)}
+                    {
+                        loading 
+                        ? <Skeleton inline={true} width={100} height={10} count={3} className="mr-2" />
+                        : rightItems.map(renderNavbarItem)
+                    }
                     </div>
                 </div>
-
-                <Link to="" className={`${showSearch ? 'hidden' : 'flex'} items-center text-base ${dark ? 'text-grayText hover:bg-white hover:text-black ' : 'text-black hover:bg-black/5 hover:text-black'}  rounded-full py-2.5 px-4 xmd:px-3 mlp:px-2 xl:px-4 xl:py-1.5 font-primary text-nowrap`} >
-                    <span className="sm:mr-3 xmd:mr-2">Log in</span>
-                    <CiUser className="hidden sm:flex text-xl font-bold" size={26}/>
-                </Link>
+                
+                {/* LOGIN BUTTON */}
+                {
+                    loading 
+                    ? <Skeleton inline={true} width={100} height={10} count={1} />
+                    : <Link to="" className={`${showSearch ? 'hidden' : 'flex'} items-center text-base ${dark ? 'text-grayText hover:bg-white hover:text-black ' : 'text-black hover:bg-black/5 hover:text-black'}  rounded-full py-2.5 px-4 xmd:px-3 mlp:px-2 xl:px-4 xl:py-1.5 font-primary text-nowrap`} >
+                        <span className="sm:mr-3 xmd:mr-2">Log in</span>
+                        <CiUser className="hidden sm:flex text-xl font-bold" size={26}/>
+                    </Link>
+                }
+                
+                {/* DROPDOWN */}
+                { dropDown && <Dropdown dropTitle={dropTitle} handleMenu={handleMenu} handleSearch={handleSearch} dropDownItems={leftItems}/>}            
             </nav>
 
             {/* Modal */}
@@ -222,18 +267,31 @@ const Navbar = () => {
                                 {renderMenuItem(item)}
                             </div>
                         ))}
-
-                        {/* Right items in modal */}
+                        
                         {rightItems.map((item) => (
                             <div className="w-full" key={item.id}>
                                 {renderMenuItem(item)}
                             </div>
                         ))}
+
                     </div>
                 </div>
             )}
         </>
     );
 };
-
 export default Navbar;
+
+
+
+// {loading ? (
+//     <div className="w-full">
+//         <Skeleton width={'80%'} height={30} className="mb-2" count={3} />
+//     </div>
+// ) : (
+//     rightItems.map((item) => (
+//         <div className="w-full" key={item.id}>
+//             {renderMenuItem(item)}
+//         </div>
+//     ))
+// )}

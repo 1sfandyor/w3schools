@@ -1,57 +1,30 @@
+import { faDiscord, faFacebook, faInstagram, faLinkedin, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import {v4 as uuidv4} from 'uuid';
 
 export const topItems = [
     {
         id: uuidv4(),
-        name: 'Tutorials',
+        icon: faYoutube,
+        url: 'https://www.youtube.com/@w3schools'
     },
     {
         id: uuidv4(),
-        name: 'Exercises',
+        icon: faLinkedin,
+        url: 'https://www.linkedin.com/company/w3schools.com/'
     },
     {
         id: uuidv4(),
-        name: 'Certificates',
+        icon: faDiscord,
+        url: 'https://discord.gg/6Z7UaRbUQM'
     },
     {
         id: uuidv4(),
-        name: 'Services'
-    },
-    
-]
-
-export const topActions = [
-    {
-        id: uuidv4(),
-        name: 'Plus',
-        path: 'plus',
+        icon: faFacebook,
+        url: 'https://www.facebook.com/w3schoolscom/'
     },
     {
         id: uuidv4(),
-        name: 'Spaces',
-        name: 'spaces',
-    },
-    {
-        id: uuidv4(),
-        name: 'Get Certifiet',
-        name: 'collections/course-catalog',
-    },
-]
-
-export const stacks = [
-    {
-        id: uuidv4(),
-        name: 'html',
-        path: 'html',
-    },
-    {
-        id: uuidv4(),
-        name: 'css',
-        name: 'javascript',
-    },
-    {
-        id: uuidv4(),
-        name: 'Get Certifiet',
-        name: 'collections/course-catalog',
+        icon: faInstagram,
+        url: 'https://www.instagram.com/w3schools.com_official/'
     },
 ]

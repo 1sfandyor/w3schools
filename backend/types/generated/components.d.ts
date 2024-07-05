@@ -28,6 +28,7 @@ export interface MenuLink extends Schema.Component {
     url: Attribute.String;
     Tutorial: Attribute.Component<'menu.tutorial'>;
     Reference: Attribute.Component<'menu.reference'>;
+    Description: Attribute.Text;
   };
 }
 
@@ -71,6 +72,30 @@ export interface MenuReference extends Schema.Component {
   };
 }
 
+export interface MenuTechno extends Schema.Component {
+  collectionName: 'components_menu_technos';
+  info: {
+    displayName: 'techno';
+    icon: 'link';
+  };
+  attributes: {
+    name: Attribute.String;
+    url: Attribute.String;
+  };
+}
+
+export interface MenuTechnologies extends Schema.Component {
+  collectionName: 'components_menu_technologies';
+  info: {
+    displayName: 'technologies';
+    icon: 'link';
+  };
+  attributes: {
+    name: Attribute.String;
+    url: Attribute.String;
+  };
+}
+
 export interface MenuTutorial extends Schema.Component {
   collectionName: 'components_menu_tutorials';
   info: {
@@ -91,6 +116,8 @@ declare module '@strapi/types' {
       'menu.menu-btn': MenuMenuBtn;
       'menu.menu-link': MenuMenuLink;
       'menu.reference': MenuReference;
+      'menu.techno': MenuTechno;
+      'menu.technologies': MenuTechnologies;
       'menu.tutorial': MenuTutorial;
     }
   }
